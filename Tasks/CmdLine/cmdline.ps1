@@ -7,12 +7,29 @@ try {
 
     # Get inputs.
     $input_failOnStderr = Get-VstsInput -Name 'failOnStderr' -AsBool
-    $input_script = Get-VstsInput -Name 'script'
     $input_workingDirectory = Get-VstsInput -Name 'workingDirectory' -Require
     Assert-VstsPath -LiteralPath $input_workingDirectory -PathType 'Container'
+    $input_targetType = Get-VstsInput -Name 'targetType'
+    if ("$input_targetType".ToUpperInvariant() -eq "FILEPATH") {
+        $input_filePath = Get-VstsInput -Name 'filePath' -Require
+        try {
+            Assert-VstsPath -LiteralPath $input_filePath -PathType Leaf
+        } catch {
+            Write-Error (Get-VstsLocString -Key 'PS_InvalidFilePath' -ArgumentList $input_filePath)
+        }
+
+        $input_arguments = Get-VstsInput -Name 'arguments'
+    } else {
+        $input_script = Get-VstsInput -Name 'script'
+    }
 
     # Generate the script contents.
-    $contents = "$input_script".Replace("`r`n", "`n").Replace("`n", "`r`n")
+    if ("$input_targetType".ToUpperInvariant() -eq 'FILEPATH') {
+        $contents = ". '$("$input_filePath".Replace("'", "''"))' $input_arguments".Trim()
+        Write-Host (Get-VstsLocString -Key 'PS_FormattingCommand' -ArgumentList $contents)
+    } else {
+        $contents = "$input_script".Replace("`r`n", "`n").Replace("`n", "`r`n")
+    }
 
     # Write the script to disk.
     Assert-VstsAgent -Minimum '2.115.0'

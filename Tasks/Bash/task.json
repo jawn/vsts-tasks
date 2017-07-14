@@ -2,7 +2,7 @@
     "id": "6C731C3C-3C68-459A-A5C9-BDE6E6595B5B",
     "name": "Bash",
     "friendlyName": "Bash",
-    "description": "Run a Bash script on Mac, Linux, or Windows",
+    "description": "Run a Bash script on macOS, Linux, or Windows",
     "helpMarkDown": "[More Information](https://go.microsoft.com/fwlink/?LinkID=613738)",
     "category": "Utility",
     "visibility": [
@@ -17,7 +17,7 @@
     "version": {
         "Major": 3,
         "Minor": 120,
-        "Patch": 0
+        "Patch": 1
     },
     "releaseNotes": "Script task consistency. Added support for multiple lines and added support for Windows.",
     "preview": true,
@@ -32,9 +32,40 @@
     ],
     "inputs": [
         {
+            "name": "targetType",
+            "type": "radio",
+            "label": "Type",
+            "required": false,
+            "defaultValue": "filePath",
+            "helpMarkDown": "Target script type: File Path or Script Content",
+            "options": {
+                "filePath": "File Path",
+                "scriptContent": "Script Content"
+            }
+        },
+        {
+            "name": "filePath",
+            "type": "filePath",
+            "label": "File path",
+            "visibleRule": "targetType = filePath",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Path of the script to execute. Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory)."
+        },
+        {
+            "name": "arguments",
+            "type": "string",
+            "label": "Arguments",
+            "visibleRule": "targetType = filePath",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Arguments passed to the PowerShell script. Either ordinal parameters or named parameters."
+        },
+        {
             "name": "script",
             "type": "multiLine",
             "label": "Script",
+            "visibleRule": "targetType = scriptContent",
             "required": true,
             "defaultValue": "# Write your commands here",
             "properties": {
@@ -70,6 +101,8 @@
     },
     "messages": {
         "JS_ExitCode": "Bash exited with code '%s'.",
+        "JS_FormattingCommand": "Formatting command: %s",
+        "JS_InvalidFilePath": "Invalid file path '%s'.",
         "JS_Stderr": "Bash wrote one or more lines to the standard error stream.",
         "JS_TranslatePathFailed": "Unable to translate the path '%s' to the Linux file system."
     }

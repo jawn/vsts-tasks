@@ -2,7 +2,7 @@
     "id": "D9BAFED4-0B18-4F58-968D-86655B4D2CE9",
     "name": "CmdLine",
     "friendlyName": "Command Line",
-    "description": "Run a command line script using cmd.exe on Windows and bash on Mac and Linux.",
+    "description": "Run a command line script using cmd.exe on Windows and bash on macOS and Linux.",
     "helpMarkDown": "[More Information](https://go.microsoft.com/fwlink/?LinkID=613735)",
     "category": "Utility",
     "visibility": [
@@ -17,7 +17,7 @@
     "version": {
         "Major": 2,
         "Minor": 120,
-        "Patch": 0
+        "Patch": 1
     },
     "releaseNotes": "Script task consistency. Added support for multiple lines.",
     "preview": true,
@@ -30,10 +30,41 @@
     ],
     "inputs": [
         {
+            "name": "targetType",
+            "type": "radio",
+            "label": "Type",
+            "required": false,
+            "defaultValue": "filePath",
+            "helpMarkDown": "Target command type: File Path or Script Content",
+            "options": {
+                "filePath": "File Path",
+                "scriptContent": "Script Content"
+            }
+        },
+        {
+            "name": "filePath",
+            "type": "filePath",
+            "label": "File path",
+            "visibleRule": "targetType = filePath",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Path of the file to execute. Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory)."
+        },
+        {
+            "name": "arguments",
+            "type": "string",
+            "label": "Arguments",
+            "visibleRule": "targetType = filePath",
+            "required": false,
+            "defaultValue": "",
+            "helpMarkDown": "Arguments passed to the PowerShell script. Either ordinal parameters or named parameters."
+        },
+        {
             "name": "script",
             "type": "multiLine",
             "label": "Script",
-            "required": true,
+            "visibleRule": "targetType = scriptContent",
+            "required": false,
             "defaultValue": "echo Write your commands here",
             "properties": {
                 "resizable": "true",
@@ -75,8 +106,11 @@
     },
     "messages": {
         "JS_ExitCode": "Bash exited with code '%s'.",
+        "JS_FormattingCommand": "Formatting command: %s",
+        "JS_InvalidFilePath": "Invalid file path '%s'.",
         "JS_Stderr": "Bash wrote one or more lines to the standard error stream.",
         "PS_ExitCode": "Cmd.exe exited with code '{0}'.",
+        "PS_FormattingCommand": "Formatting command: {0}",
         "PS_UnableToDetermineExitCode": "Unexpected exception. Unable to determine the exit code from cmd.exe."
     }
 }

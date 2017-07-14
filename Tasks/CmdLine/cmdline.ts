@@ -10,9 +10,33 @@ async function run() {
         tl.setResourcePath(path.join(__dirname, 'task.json'));
 
         // Get inputs.
-        let failOnStderr = tl.getBoolInput('failOnStderr', false);
-        let script: string = tl.getInput('script', false) || '';
-        let workingDirectory = tl.getPathInput('workingDirectory', /*required*/ true, /*check*/ true);
+        let input_failOnStderr = tl.getBoolInput('failOnStderr', false);
+        let input_workingDirectory = tl.getPathInput('workingDirectory', /*required*/ true, /*check*/ true);
+        let input_filePath: string;
+        let input_arguments: string;
+        let input_script: string;
+        let input_targetType: string = tl.getInput('targetType') || '';
+        if (input_targetType.toUpperCase() == 'FILEPATH') {
+            input_filePath = tl.getPathInput('filePath', /*required*/ true);
+            if (!tl.stats(input_filePath).isFile()) {
+                throw new Error(tl.loc('JS_InvalidFilePath', input_filePath));
+            }
+
+            input_arguments = tl.getInput('arguments') || '';
+        }
+        else {
+            input_script = tl.getInput('script', false) || '';
+        }
+
+        // Generate the script contents.
+        let contents: string;
+        if (input_targetType.toUpperCase() == 'FILEPATH') {
+            contents = `. '${input_filePath.replace("'", "''")}' ${input_arguments}`.trim();
+            console.log(tl.loc('JS_FormattingCommand', contents));
+        }
+        else {
+            contents = input_script;
+        }
 
         // Write the script to disk.
         tl.assertAgent('2.115.0');
@@ -21,9 +45,8 @@ async function run() {
         let filePath = path.join(tempDirectory, uuidV4() + '.sh');
         await fs.writeFileSync(
             filePath,
-            '\ufeff' + script,      // Prepend the Unicode BOM character.
-            { encoding: 'utf8' });  // Since UTF8 encoding is specified, node will
-        //                          // encode the BOM into its UTF8 binary sequence.
+            contents, // Don't add a BOM. It causes the script to fail on some operating systems (verified on Ubuntu 14).
+            { encoding: 'utf8' });
 
         // Create the tool runner.
         let bash = tl.tool(tl.which('bash', true))
@@ -31,7 +54,7 @@ async function run() {
             .arg(`--norc`)
             .arg(filePath);
         let options = <tr.IExecOptions>{
-            cwd: workingDirectory,
+            cwd: input_workingDirectory,
             failOnStdErr: false,
             errStream: process.stdout, // Direct all output to STDOUT, otherwise the output may appear out
             outStream: process.stdout, // of order since Node buffers it's own STDOUT but not STDERR.
@@ -40,7 +63,7 @@ async function run() {
 
         // Listen for stderr.
         let stderrFailure = false;
-        if (failOnStderr) {
+        if (input_failOnStderr) {
             bash.on('stderr', (data) => {
                 stderrFailure = true;
             });
