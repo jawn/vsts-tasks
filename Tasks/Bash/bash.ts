@@ -29,10 +29,11 @@ async function run() {
         }
 
         // Generate the script contents.
+        console.log(tl.loc('GeneratingScript'));
         let contents: string;
         if (input_targetType.toUpperCase() == 'FILEPATH') {
-            contents = `. '${input_filePath.replace("'", "''")}' ${input_arguments}`.trim();
-            console.log(tl.loc('JS_FormattingCommand', contents));
+            contents = `. '${input_filePath.replace("'", "'\\''")}' ${input_arguments}`.trim();
+            console.log(tl.loc('JS_FormattedCommand', contents));
         }
         else {
             contents = input_script;

@@ -129,6 +129,7 @@
         }
     },
     "messages": {
+        "GeneratingScript": "Generating script.",
         "JS_ExitCode": "PowerShell exited with code '%s'.",
         "JS_FormattingCommand": "Formatting command: %s",
         "JS_InvalidErrorActionPreference": "Invalid ErrorActionPreference '%s'. The value must be one of: 'Stop', 'Continue', or 'SilentlyContinue'",

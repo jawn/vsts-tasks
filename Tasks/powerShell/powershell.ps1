@@ -38,6 +38,7 @@ try {
     }
 
     # Generate the script contents.
+    Write-Host (Get-VstsLocString -Key 'GeneratingScript')
     $contents = @()
     $contents += "`$ErrorActionPreference = '$input_errorActionPreference'"
     if ("$input_targetType".ToUpperInvariant() -eq 'FILEPATH') {

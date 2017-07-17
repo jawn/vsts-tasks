@@ -29,10 +29,17 @@ async function run() {
         }
 
         // Generate the script contents.
+        console.log(tl.loc('GeneratingScript'));
         let contents: string;
         if (input_targetType.toUpperCase() == 'FILEPATH') {
-            contents = `. '${input_filePath.replace("'", "''")}' ${input_arguments}`.trim();
-            console.log(tl.loc('JS_FormattingCommand', contents));
+            if (input_filePath.match(/\.sh$/)) {
+                contents = `. '${input_filePath.replace("'", "'\\''")}' ${input_arguments}`.trim();
+            }
+            else {
+                contents = `'${input_filePath.replace("'", "'\\''")}' ${input_arguments}`.trim();
+            }
+
+            console.log(tl.loc('JS_FormattedCommand', contents));
         }
         else {
             contents = input_script;

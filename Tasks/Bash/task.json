@@ -100,8 +100,9 @@
         }
     },
     "messages": {
+        "GeneratingScript": "Generating script.",
         "JS_ExitCode": "Bash exited with code '%s'.",
-        "JS_FormattingCommand": "Formatting command: %s",
+        "JS_FormattedCommand": "Formatted command: %s",
         "JS_InvalidFilePath": "Invalid file path '%s'.",
         "JS_Stderr": "Bash wrote one or more lines to the standard error stream.",
         "JS_TranslatePathFailed": "Unable to translate the path '%s' to the Linux file system."

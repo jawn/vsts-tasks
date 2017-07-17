@@ -24,9 +24,10 @@ try {
     }
 
     # Generate the script contents.
+    Write-Host (Get-VstsLocString -Key 'GeneratingScript')
     if ("$input_targetType".ToUpperInvariant() -eq 'FILEPATH') {
         $contents = ". '$("$input_filePath".Replace("'", "''"))' $input_arguments".Trim()
-        Write-Host (Get-VstsLocString -Key 'PS_FormattingCommand' -ArgumentList $contents)
+        Write-Host (Get-VstsLocString -Key 'PS_FormattedCommand' -ArgumentList $contents)
     } else {
         $contents = "$input_script".Replace("`r`n", "`n").Replace("`n", "`r`n")
     }

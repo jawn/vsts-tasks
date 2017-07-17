@@ -39,6 +39,7 @@ async function run() {
         }
 
         // Generate the script contents.
+        console.log(tl.loc('GeneratingScript'));
         let contents: string[] = [];
         contents.push(`$ErrorActionPreference = '${input_errorActionPreference}'`);
         if (input_targetType.toUpperCase() == 'FILEPATH') {

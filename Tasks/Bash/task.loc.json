@@ -100,8 +100,9 @@
     }
   },
   "messages": {
+    "GeneratingScript": "ms-resource:loc.messages.GeneratingScript",
     "JS_ExitCode": "ms-resource:loc.messages.JS_ExitCode",
-    "JS_FormattingCommand": "ms-resource:loc.messages.JS_FormattingCommand",
+    "JS_FormattedCommand": "ms-resource:loc.messages.JS_FormattedCommand",
     "JS_InvalidFilePath": "ms-resource:loc.messages.JS_InvalidFilePath",
     "JS_Stderr": "ms-resource:loc.messages.JS_Stderr",
     "JS_TranslatePathFailed": "ms-resource:loc.messages.JS_TranslatePathFailed"

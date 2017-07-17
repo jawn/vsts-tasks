@@ -20,6 +20,7 @@
   "loc.input.help.ignoreLASTEXITCODE": "If this is false, the line `if ((Test-Path -LiteralPath variable:\\LASTEXITCODE)) { exit $LASTEXITCODE }` is appended to the end of your script. This will cause the last exit code from an external command to be propagated as the exit code of powershell. Otherwise the line is not appended to the end of your script.",
   "loc.input.label.workingDirectory": "Working Directory",
   "loc.input.help.workingDirectory": "Working directory where the script is run.",
+  "loc.messages.GeneratingScript": "Generating script.",
   "loc.messages.JS_ExitCode": "PowerShell exited with code '%s'.",
   "loc.messages.JS_FormattingCommand": "Formatting command: %s",
   "loc.messages.JS_InvalidErrorActionPreference": "Invalid ErrorActionPreference '%s'. The value must be one of: 'Stop', 'Continue', or 'SilentlyContinue'",
